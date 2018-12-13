@@ -1,3 +1,6 @@
+// Copyright (C) Themba Dube, 2018
+// All rights reserved.
+
 var input, button, greeting;
 
 var xLeft = 50;
