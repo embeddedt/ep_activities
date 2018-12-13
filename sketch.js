@@ -3,7 +3,7 @@
 
 var input, button, greeting;
 
-var xLeft = 50;
+var xLeft = 75;
 var yButtons = 460;
 
 var bars = [ 0, 0, 0, 0, 0, 0, 0 ];
@@ -15,13 +15,13 @@ function barDown() {
 function setup() {
 
   // create canvas
-  createCanvas(800, 540);
+  createCanvas(850, 540);
 
   textAlign(CENTER);
   textSize(50);
   
   var title = createInput('Click here to enter a title for the chart');
-  title.position(100, 10);
+  title.position(125, 10);
   title.size(600, 30);
   title.style('background-color', '#ad84ff');
   title.style('font-size', '1.6em');
@@ -62,6 +62,18 @@ function setup() {
             bars[this.id] -= 0.5;
       });
   }
+  var xAxisLabel = createInput('Click here to label the x-axis');
+  xAxisLabel.size(400, 30);
+  xAxisLabel.style('font-size', '1.2em');
+  xAxisLabel.style('textAlign', 'center');
+  xAxisLabel.position(200, yButtons+50);
+  var yAxisLabel = createInput('Click here to label the y-axis');
+  yAxisLabel.style('-webkit-transform: rotate(-90deg);');
+  yAxisLabel.style('-moz-transform: rotate(-90deg);');
+  yAxisLabel.position(-130, 230);
+  yAxisLabel.size(300, 30);
+  yAxisLabel.style('font-size', '1.2em');
+  yAxisLabel.style('textAlign', 'center');
 }
 function draw() {
     background(255, 255, 255);
