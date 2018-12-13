@@ -6,7 +6,7 @@ var input, button, greeting;
 var xLeft = 50;
 var yButtons = 460;
 
-var bars = [ 0, 1, 2, 3, 4, 5, 6 ];
+var bars = [ 0, 0, 0, 0, 0, 0, 0 ];
 var baseline;
 function barUp() {
 }
