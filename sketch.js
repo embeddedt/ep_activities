@@ -8,25 +8,56 @@ var yButtons = 460;
 
 var bars = [ 0, 0, 0, 0, 0, 0, 0 ];
 var baseline;
+var labelGap;
+var labelLeft;
+var baseMargin = 10;
+var theWidth;
+var html5Objs = [];
 function barUp() {
 }
 function barDown() {
 }
+function max(a, b)
+{
+    return a < b ? b : a;
+}
+function min(a, b)
+{
+    return a > b ? b : a;
+}
+function windowResized() {
+    html5Objs.foreach(function(entry) {
+        entry.remove();
+    });
+    theWidth = max(windowWidth, 480);
+    theWidth = min(theWidth, 1000);
+    labelGap = theWidth / 8;
+    labelLeft = theWidth / 7;
+    init();
+}
 function setup() {
+    theWidth = max(windowWidth, 480);
+    theWidth = min(theWidth, 1000);
+    createCanvas(windowWidth, 540);
+    init();
+}
+function init() {
 
   // create canvas
-  createCanvas(850, 540);
-
+  resizeCanvas(theWidth, 540);
+  labelGap = theWidth / 8;
+  labelLeft = theWidth / 7;
   textAlign(CENTER);
   textSize(50);
   
   var title = createInput('Click here to enter a title for the chart');
-  title.position(125, 10);
-  title.size(600, 30);
+  title.size(theWidth-(baseMargin*2), 30);
+  title.position(baseMargin, baseMargin);
   title.style('background-color', '#ad84ff');
-  title.style('font-size', '1.6em');
+  title.style('font-size', theWidth/600 + 'em');
   title.style('font-weight', 'bold');
   title.style('textAlign', 'center');
+  html5Objs.push(title);
   for(var i = 0; i <= 8; i++)
     {
         var y = i * 50;
@@ -35,16 +66,17 @@ function setup() {
         chartInput.size(30, 20);        
         chartInput.style('border-style', 'solid');
         chartInput.style('border-width', '0.2em');
+        html5Objs.push(chartInput);
     }
     
   for(var i = 0; i < 6; i++)
   {
       var chartLabel = createInput('Label ' + (i + 1));
-      chartLabel.position(85+i*120, yButtons);
+      chartLabel.position(labelLeft+i*labelGap, yButtons);
       chartLabel.size(70, 20);
       chartLabel.style('textAlign', 'center');
       var upButton = createImg('arrowupgreen.png');
-      upButton.position(100+i*120, yButtons+20);
+      upButton.position(labelLeft+15+i*labelGap, yButtons+20);
       upButton.size(20, 20);
       upButton.style('--bar', i);
       upButton.elt.id = i;
@@ -53,7 +85,7 @@ function setup() {
             bars[this.id] += 0.5;
       });
       var downButton = createImg('arrowdownred.png');
-      downButton.position(120+i*120, yButtons+20);
+      downButton.position(labelLeft+40+i*labelGap, yButtons+20);
       downButton.size(20, 20);
       downButton.style('--bar', i);
       downButton.elt.id = i;
@@ -61,12 +93,16 @@ function setup() {
           if(bars[this.id] > 0)
             bars[this.id] -= 0.5;
       });
+      html5Objs.push(chartLabel);
+      html5Objs.push(upButton);
+      html5Objs.push(downButton);
   }
   var xAxisLabel = createInput('Click here to label the x-axis');
-  xAxisLabel.size(400, 30);
   xAxisLabel.style('font-size', '1.2em');
   xAxisLabel.style('textAlign', 'center');
-  xAxisLabel.position(200, yButtons+50);
+  xAxisLabel.size(theWidth-(baseMargin*2), 30);
+  xAxisLabel.position(baseMargin, yButtons+50);
+  html5Objs.push(xAxisLabel);
   var yAxisLabel = createInput('Click here to label the y-axis');
   yAxisLabel.style('-webkit-transform: rotate(-90deg);');
   yAxisLabel.style('-moz-transform: rotate(-90deg);');
@@ -74,13 +110,14 @@ function setup() {
   yAxisLabel.size(300, 30);
   yAxisLabel.style('font-size', '1.2em');
   yAxisLabel.style('textAlign', 'center');
+  html5Objs.push(yAxisLabel);
 }
 function draw() {
     background(255, 255, 255);
     noFill();
     stroke(0, 0, 0);
     strokeWeight(1);
-    rect(0, 0, 799, 539);
+    rect(0, 0, theWidth - 1, 540 - 1);
     for(var i = 0; i <= 9; i++)
     {
         var y = i * 50;
@@ -88,14 +125,14 @@ function draw() {
             strokeWeight(5);
         else
             strokeWeight(1);
-        line(xLeft, y, 780, y);
+        line(xLeft, y, theWidth-(baseMargin*5), y);
         if(i == 9)
             baseline = y;
     }
     noStroke();
     for(var i = 0; i < 6; i++)
     {
-        var x = 110 + i * 120;
+        var x = labelLeft + 25 + i * labelGap;
         switch(i)
         {
             case 0:
